@@ -28,10 +28,6 @@ contract Voting is EIP712WithModifier {
         owner = msg.sender;
     }
 
-    modifier OnlyOwner {
-        require(msg.sender == owner, "Only Owner");
-        _;
-    }
 
     // encryptedChoice can be 0 (republican) or 1 (democrat)
     function castVote(bytes calldata encryptedChoice) public {
@@ -47,7 +43,7 @@ contract Voting is EIP712WithModifier {
         republicanCountEncrypted = TFHE.add(republicanCountEncrypted, republicanCountToCast);
     }
 
-    function revealResult() public OnlyOwner {
+    function revealResult() public {
         democratCount = TFHE.decrypt(democratCountEncrypted);
         republicanCount = TFHE.decrypt(republicanCountEncrypted);
     }
